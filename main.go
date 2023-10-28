@@ -5,8 +5,18 @@ import (
 	"github.com/spf13/viper"
 )
 
+type MySQL struct {
+	Host     string
+	DbName   string
+	Port     int
+	usename  string
+	Password string
+	Charset  string
+}
+
 func main() {
 	// 创建一个默认的路由引擎
+	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.ReadInConfig()

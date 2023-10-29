@@ -10,7 +10,10 @@ func main() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
-	viper.ReadInConfig()
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal("read config failed: %v", err)
+	}
 
 	// 注册每次配置文件发生变更后都会调用的回调函数
 	viper.OnConfigChange(func(e fsnotify.Event) {

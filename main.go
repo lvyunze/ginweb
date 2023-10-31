@@ -3,6 +3,7 @@ package main
 import (
 	"ginweb/routers"
 	"github.com/spf13/viper"
+	"log/slog"
 )
 
 func main() {
@@ -12,7 +13,7 @@ func main() {
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatal("read config failed: %v", err)
+		slog.Error("read config failed: %v", err)
 	}
 
 	// 注册每次配置文件发生变更后都会调用的回调函数

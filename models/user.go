@@ -7,10 +7,10 @@ import (
 
 // User data model
 type User struct {
-	gorm.Model
-	Username     string
-	DisplayName  string
-	PasswordHash string
+	gorm.Model   `json:"gorm_._model,omitempty"`
+	Username     string `json:"username,omitempty"`
+	DisplayName  string `json:"display_name,omitempty"`
+	PasswordHash string `json:"password_hash,omitempty"`
 }
 
 // Serialize serializes user data

@@ -13,3 +13,9 @@ type Redis struct {
 	Host string
 	Port string
 }
+
+type User struct {
+	ID       uint
+	Username string
+	Email    string
+}

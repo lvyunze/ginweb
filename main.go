@@ -1,15 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"ginweb/routers"
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"log/slog"
 )
 
 func main() {
 	// 创建一个默认的路由引擎
+	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
-	viper.ReadInConfig()
+	err := viper.ReadInConfig()
+	if err != nil {
+		slog.Error("read config failed: %v", err)
+	}
 
 	// 注册每次配置文件发生变更后都会调用的回调函数
 	viper.OnConfigChange(func(e fsnotify.Event) {

@@ -2,26 +2,36 @@ package models
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
+var err error
 
 func init() {
-	//配置MySQL连接参数
-	username := "root"  //账号
-	password := "root"  //密码
-	host := "127.0.0.1" //数据库地址，可以是Ip或者域名
-	port := 3306        //数据库端口
-	Dbname := "gorm"    //数据库名
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, Dbname)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+	dbHost := viper.GetString("MySQL.Host")
+	dbPort := viper.GetString("MySQL.Port")
+	dbUser := viper.GetString("MySQL.Username")
+	dbPassword := viper.GetString("MySQL.Password")
+	dbName := viper.GetString("MySQL.DbName")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		dbUser, dbPassword, dbHost, dbPort, dbName)
+
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("连接数据库失败, error=" + err.Error())
+		fmt.Printf("无法连接到MySQL数据库：%v", err)
+		panic("无法连接到MySQL数据库")
 	}
-	DB = db
+
+	// 设置连接池参数
+	sqlDB, err := DB.DB()
+	if err != nil {
+		fmt.Printf("获取数据库连接池失败：%v", err)
+		panic("获取数据库连接池失败")
+	}
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(100)
 }

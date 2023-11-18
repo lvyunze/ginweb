@@ -3,12 +3,11 @@ package models
 import (
 	"ginweb/ext"
 	"ginweb/utils/common"
-	"gorm.io/gorm"
 )
 
 // User data model
 type User struct {
-	gorm.Model   `json:"gorm_._model,omitempty"`
+	ID           int
 	Username     string `json:"username,omitempty"`
 	DisplayName  string `json:"display_name,omitempty"`
 	PasswordHash string `json:"password_hash,omitempty"`
